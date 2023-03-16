@@ -27,13 +27,12 @@ assessmentRouter.post(
 );
 
 assessmentRouter.get(
-  `/`,
+  `/list`,
   async (req, res, next) => {
     try {
       // verify that your data is making it here to the API by using console.log();
       // call the AssessmentService.getList function from packages/api/src/microservices/Assessment-Service.js
-      const assessments = [];
-
+      const assessments = await AssessmentService.getList();
       ResponseHandler(
         res,
         `Fetched assessments`,
