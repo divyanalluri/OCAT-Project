@@ -4,6 +4,20 @@ const { UserService } = require(`../microservices`);
 
 const userRouter = Router();
 
-// Place your routes in here
+userRouter.post(
+  `/login`,
+  async (req, res, next) => {
+    try {
+      const userDetails = await UserService.login(req.body);
+      ResponseHandler(
+        res,
+        `Successfully verified user`,
+        { userDetails },
+      );
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 module.exports = { userRouter };
