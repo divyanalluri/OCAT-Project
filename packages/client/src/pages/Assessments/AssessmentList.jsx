@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useTable } from 'react-table';
 import { AssessmentService } from '../../services/AssessmentService';
 import './assessment.scss';
@@ -6,16 +7,15 @@ import './assessment.scss';
 export const AssessmentList = () => {
   const [ assessments, setAssessments ] = useState([]);
 
+  const fetchAssessments = async () => {
+    setAssessments(await AssessmentService.getList());
+  };
+
   // fetch all assessments using the AssessmentService.getList function from OCAT/client/services/AssessmentService.js
   useEffect(() => {
-    const fetchAssessments = async () => {
-      setAssessments(await AssessmentService.getList());
-    };
     fetchAssessments();
   }, []);
 
-  // eslint-disable-next-line no-console
-  console.log(`assessments list`, assessments);
   const columns = React.useMemo(
     () => [
       {
@@ -50,12 +50,13 @@ export const AssessmentList = () => {
         Headers: `Updated At`,
         accessor: `updatedAt`,
       },
-      {
-        Headers: `Deleted At`,
-        accessor: `deletedAt`,
-      },
     ], []
   );
+
+  const onDelete = async (id) => {
+    await AssessmentService.delete({ id });
+    fetchAssessments();
+  };
 
   const tableInstance = useTable({
     columns,
@@ -78,6 +79,11 @@ export const AssessmentList = () => {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => <td {...cell.getCellProps()}>{cell.render(`Cell`)}</td>)}
+                <td>
+                  <Button onClick={() => onDelete(row.values.id)}>
+                    Delete
+                  </Button>
+                </td>
               </tr>
             );
           })}

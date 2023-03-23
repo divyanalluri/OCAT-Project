@@ -44,4 +44,22 @@ assessmentRouter.get(
   },
 );
 
+assessmentRouter.post(
+  `/delete`,
+  async (req, res, next) => {
+    try {
+      // eslint-disable-next-line no-console
+      console.log(`in routes`, req.body);
+      await AssessmentService.delete(req.body);
+      ResponseHandler(
+        res,
+        `Assessment Soft Deleted Successfully `,
+        {},
+      );
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 module.exports = { assessmentRouter };
