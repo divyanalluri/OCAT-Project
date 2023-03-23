@@ -20,3 +20,8 @@ exports.getList = async () => {
   const assessments = await Assessment.findAll();
   return assessments;
 };
+
+exports.delete = async (id) => {
+  const assessment = await Assessment.findByPk(id.id);
+  await assessment.destroy();
+};
