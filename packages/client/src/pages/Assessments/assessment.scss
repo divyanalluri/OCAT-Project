@@ -1,18 +1,24 @@
-.assessment-list {
-  table {
-    border: solid 1px blue;
+.assessment {
+  &.assessment-list {
+    table {
+      border: solid 1px blue;
+    }
+
+    td {
+      padding: 10px;
+      border: solid 1px gray;
+    }
+
+    th {
+      background: aliceblue;
+      color: black;
+      padding: 10px;
+      border: solid 1px gray;
+      font-weight: bold;
+    }
   }
 
-  td {
-    padding: 10px;
-    border: solid 1px gray;
-  }
-
-  th {
-    background: aliceblue;
-    color: black;
-    padding: 10px;
-    border: solid 1px gray;
-    font-weight: bold;
+  .error {
+    color: red;
   }
 }

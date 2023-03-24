@@ -5,7 +5,7 @@ import { UserService } from '../../services/UserService';
 import './login.scss';
 
 export const Login = () => {
-  const { handleSubmit, register } = useForm();
+  const { formState: { errors }, handleSubmit, register } = useForm();
   // const [ isLoggedIn, setLogin ] = useState(false);
 
   const onLogin = async (data) => {
@@ -24,8 +24,9 @@ export const Login = () => {
             type="text"
             placeholder="Enter your User Name"
             className="form-control"
-            {...register(`username`)}
+            {...register(`username`, { required: true })}
           />
+          {errors.username?.type === `required` && <p className="error" role="alert"> * User Name is required</p>}
         </div>
         <div className="form-group">
           <label className="font-weight-bold" htmlFor="passwd">Password</label>
@@ -34,8 +35,9 @@ export const Login = () => {
             type="password"
             className="form-control"
             placeholder="Enter your password"
-            {...register(`password`)}
+            {...register(`password`, { required: true })}
           />
+          {errors.password?.type === `required` && <p className="error" role="alert"> * Password is required</p>}
         </div>
         <Button variant="primary" type="submit">
           Sign In

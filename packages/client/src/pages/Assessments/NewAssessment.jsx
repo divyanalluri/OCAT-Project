@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { AssessmentService } from '../../services/AssessmentService';
 
 export const NewAssessment = () => {
-  const { getValues, handleSubmit, register } = useForm();
+  const { formState: { errors }, getValues, handleSubmit, register, reset } = useForm();
   // create a form that utilizes the "onSubmit" function to send data to
   // packages/client/src/services/AssessmentService.js and then onto the packages/api/src/routes/assessment express API
 
@@ -40,16 +40,19 @@ export const NewAssessment = () => {
     // TODO: Need to remove the below line if not required in future
     data.deleted_at = ``;
     data.updated_at = ``;
+    // TODO: Need to remove the logging below
     // eslint-disable-next-line no-console
     console.log(
       `score: ${data.score}, risk level values: ${data.riskLevel}, complete data:`,
       data
     );
     await AssessmentService.submit(data);
+    alert(`Successfully submitted the Cat details`);
+    reset();
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} className="assessment">
       <div className="form-group">
         <label htmlFor="instrument-name">Instrument Name</label>
         <input
@@ -67,8 +70,10 @@ export const NewAssessment = () => {
           type="text"
           placeholder="Enter your Cat Name"
           className="form-control"
-          {...register(`cat_name`)}
+          aria-invalid={errors.cat_name ? `true` : `false`}
+          {...register(`cat_name`, { required: true })}
         />
+        {errors.cat_name?.type === `required` && <p className="error" role="alert"> * Cat Name is required</p>}
       </div>
       <div className="form-group">
         <label htmlFor="cat-dob">Cat Date of Birth</label>
@@ -77,8 +82,10 @@ export const NewAssessment = () => {
           type="date"
           className="form-control"
           placeholder="Enter Cat Date of Birth"
-          {...register(`cat_date_of_birth`)}
+          aria-invalid={errors.cat_date_of_birth ? `true` : `false`}
+          {...register(`cat_date_of_birth`, { required: true })}
         />
+        {errors.cat_date_of_birth?.type === `required` && <p className="error" role="alert"> * Cat DOB is required</p>}
       </div>
       <h4>Questions & Responses</h4>
       <div className="form-group">

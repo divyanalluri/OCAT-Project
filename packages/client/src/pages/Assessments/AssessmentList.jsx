@@ -64,7 +64,7 @@ export const AssessmentList = () => {
   });
   const { getTableBodyProps, getTableProps, headerGroups, prepareRow, rows } = tableInstance;
   return (
-    <div className="assessment-list">
+    <div className="assessment assessment-list">
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup =>
