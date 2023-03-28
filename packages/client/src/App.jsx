@@ -1,11 +1,16 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { SiteWrapper } from './components';
 import { DashboardBulletin } from './pages/Dashboard/DashboardBulletin';
 import { NewAssessment } from './pages/Assessments/NewAssessment.jsx';
 import { AssessmentList } from './pages/Assessments/AssessmentList';
 import { Login } from './pages/User/Login';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Logout } from './pages/User/Logout';
+import ProtectedRoute from './components/ProtectedRoute';
+
+const isLoggedIn = Cookies.get(`isLoggedIn`);
 
 const router = createBrowserRouter([
   {
@@ -17,11 +22,19 @@ const router = createBrowserRouter([
     path: `/user/login`,
   },
   {
-    element: <NewAssessment />,
+    element: <Logout />,
+    path: `/user/logout`,
+  },
+  {
+    element: <ProtectedRoute isLoggedIn={isLoggedIn}>
+      <NewAssessment />
+    </ProtectedRoute>,
     path: `/assessment/new`,
   },
   {
-    element: <AssessmentList />,
+    element: <ProtectedRoute isLoggedIn={isLoggedIn}>
+      <AssessmentList />
+    </ProtectedRoute>,
     path: `/assessment/list`,
   },
 

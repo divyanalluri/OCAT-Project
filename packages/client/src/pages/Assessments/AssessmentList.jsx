@@ -53,9 +53,21 @@ export const AssessmentList = () => {
     ], []
   );
 
-  const onDelete = async (id) => {
-    await AssessmentService.delete({ id });
-    fetchAssessments();
+  const deleteAssessment = async (id) => await AssessmentService.delete({ id });
+
+  const onDelete = (id) => {
+    // eslint-disable-next-line no-restricted-globals
+    const toDelete = confirm(`Are you sure you want to delete ?`);
+    if (toDelete) {
+      deleteAssessment(id).then(res => {
+        if (res.status === `SUCCESS`) {
+          setAssessments(assessments.filter((assessment) => assessment.id !== id));
+          alert(`Successfully deleted your assessment !`);
+        } else {
+          alert(`Unable to delete your assessment, please try again `);
+        }
+      });
+    }
   };
 
   const tableInstance = useTable({
@@ -70,7 +82,7 @@ export const AssessmentList = () => {
           {headerGroups.map(headerGroup =>
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column =>
-                <th {...column.getHeaderProps()}>{column.render(`Headers`)}</th>)}
+                <th {...column.getHeaderProps()}>{column.render(`Headers`)}</th>)}<th>Actions</th>
             </tr>)}
         </thead>
         <tbody {...getTableBodyProps()}>
